@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css" />
+    <script src="https://code.jquery.com/jquery-1.11.1.min.js"></script>
+    <script src="https://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
+
+    <title>Curiositweet</title>
+</head>
+
+<body>
+    <div data-role="page" id="index-page">
+        <div data-role="header">
+            <div data-role="header">
+                <h1>Nearby Tweets</h1>
+                <a id="refresh-button" href="#index.html" data-icon="refresh" class="ui-btn-right">Refresh</a>
+            </div>
+        </div>
+
+        <div data-role="content">
+
+            <ul id="tweet-list" data-role="listview">
+                <!-- List of tweets goes here -->
+            </ul>
+        </div>
+    </div>
+
+    <div data-role="page" id="tweet-details-page">
+        <div data-role="header" data-add-back-btn="true">
+            <h1>Tweet Details</h1>
+        </div>
+
+        <div data-role="content">
+            <h4 id="tweet-author"></h4>
+            <ul data-role="listview" data-inset="true">
+                <li><span id="tweet-text"></span></li>
+            </ul>
+        </div>
+    </div>
+</body>
+
+<script src="js/app.js"></script>
+</html>
