@@ -125,6 +125,12 @@ $(document).on('pagebeforeshow', '#map-page', function() {
             });
         });
 
+        // Add popup for current location
+        infoWindow = new google.maps.InfoWindow;
+        infoWindow.setPosition(latlng);
+        infoWindow.setContent('You are here');
+        infoWindow.open(map);
+
         google.maps.event.addListenerOnce(map, 'idle', function(){
             // Resize and center map when page is loaded
             google.maps.event.trigger(map, 'resize');
