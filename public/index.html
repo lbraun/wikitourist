@@ -4,8 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css" />
+    <link rel="stylesheet" href="../css/styles.css" />
     <script src="https://code.jquery.com/jquery-1.11.1.min.js"></script>
     <script src="https://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
+    <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDPVfT4cXdc3hlm-trb__C_e2rdD5lEukw"></script>
 
     <title>Wiki to Go</title>
 </head>
@@ -13,7 +15,7 @@
 <body>
     <div data-role="page" id="index-page">
         <div data-role="header">
-            <a id="map-button" href="#index.html" data-icon="star">Map</a>
+            <a id="map-button" href="#" data-icon="star">Map</a>
             <h1>Nearby</h1>
             <a id="refresh-button" href="#index.html" data-icon="refresh" data-iconpos="right" class="ui-btn-right">Refresh</a>
         </div>
@@ -37,7 +39,6 @@
             <i><span id="article-description"></span></i>
 
             <ul data-role="listview" data-inset="true">
-                <li><span id="article-text"></span></li>
                 <li><a id="article-link" target="_blank">Link to full article</a></li>
             </ul>
         </div>
@@ -49,7 +50,7 @@
         </div>
 
         <div data-role="content">
-            <div id="map"></div>
+            <div id="map-canvas"></div>
         </div>
     </div>
 </body>
