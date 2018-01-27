@@ -1,2 +1,2 @@
-# curiositweet
-Discover popular tweet topics near you
+# wikitourist
+Discover places listed on Wikipedia near you
