@@ -7,10 +7,10 @@
 
 <!-- versionCode is optional and Android only -->
 
-  <name>Curiositweet</name>
+  <name>Wikitourist</name>
 
   <description>
-      Check out tweets near you!
+      Check out places from Wikipedia near you!
   </description>
 
   <author href="http://github.com/lbraun/">
