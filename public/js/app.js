@@ -1,10 +1,15 @@
 var GOOGLE_KEY = "AIzaSyD2qgiiv8Ajhq_i8Yt9Et7ruQJ9ssuVjZY";
 var CURRENT_ARTICLE = "";
 var ARTICLES = [];
+var LAST_OPENED_INFO_WINDOW;
 
 // Initialize position with Castellon's coordinates
 var LAT = 39.98305556;
 var LNG = -0.03305556;
+
+function generateURL(article) {
+    return 'https://en.wikipedia.org/wiki/' + CURRENT_ARTICLE.title;
+}
 
 function refreshIndex() {
     // Get current location
@@ -35,12 +40,14 @@ function refreshIndex() {
             $('#article-list li').remove();
 
             // Populate list with fresh articles
+            var i = 1;
             $.each(articles, function (index, article) {
                 $('#article-list').append(
                     '<li data-id=' + index + '>' +
-                    '<a id="article-details-link" href="#">' + article.title +
+                    '<a id="article-details-link" href="#">' + i + '. ' + article.title +
                     // '<span class="ui-li-count">' + Math.round(article.dist/100)/10 + ' km</span>' +
                     '</a></li>');
+                i++;
             });
 
             // Refresh list content
@@ -96,7 +103,7 @@ $(document).on('pagebeforeshow', '#article-details-page', function(e) {
     if (CURRENT_ARTICLE.terms) {
         $('#article-description').text(CURRENT_ARTICLE.terms.description);
     }
-    $('#article-link').attr('href', 'https://en.wikipedia.org/wiki/' + CURRENT_ARTICLE.title);
+    $('#article-link').attr('href', generateURL(CURRENT_ARTICLE));
 });
 
 /*
@@ -114,22 +121,45 @@ $(document).on('pagebeforeshow', '#map-page', function() {
         };
         var map = new google.maps.Map(document.getElementById("map-canvas"), myOptions);
 
+        // Add popup for current location (has issues)
+        // infoWindow = new google.maps.InfoWindow;
+        // infoWindow.setPosition(latlng);
+        // infoWindow.setContent('You are here');
+        // infoWindow.open(map);
+
         // Add markers for nearby wiki articles
+        var i = 1;
         jQuery.each(ARTICLES, function(index, article) {
             var lat = article.coordinates[0].lat;
             var lng = article.coordinates[0].lon;
+
             var marker = new google.maps.Marker({
+                label: "" + i,
                 position: new google.maps.LatLng(lat, lng),
                 map: map,
-                title: article.title
+                title: article.title,
+                message: "Hello!"
             });
-        });
 
-        // Add popup for current location
-        infoWindow = new google.maps.InfoWindow;
-        infoWindow.setPosition(latlng);
-        infoWindow.setContent('You are here');
-        infoWindow.open(map);
+            popupContent = '<div data-id=' + index + '>' +
+                '<a id="article-details-link" href="#">' + article.title +
+                '</a></div>'
+
+            var infoWindow = new google.maps.InfoWindow({
+                content: popupContent
+            });
+
+            marker.addListener('click', function() {
+                if (typeof LAST_OPENED_INFO_WINDOW != 'undefined') {
+                    LAST_OPENED_INFO_WINDOW.close();
+                }
+
+                LAST_OPENED_INFO_WINDOW = infoWindow;
+                infoWindow.open(map, marker);
+            });
+
+            i++;
+        });
 
         google.maps.event.addListenerOnce(map, 'idle', function(){
             // Resize and center map when page is loaded
