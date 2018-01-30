@@ -1,3 +1,7 @@
+#map-content {
+  padding: 0px;
+}
+
 #map-canvas {
   height: 500px;
 }
