@@ -1,10 +1,9 @@
-const IPSTACK_KEY = "ee8998b41f3cb732d963528b4b46a46a"
 let CURRENT_ARTICLE = ""
 let ARTICLES = []
 let LAST_OPENED_INFO_WINDOW
 
 // Initialize position with Castellon's coordinates
-const DEFAULT_LOCATION = {
+let LOCATION = {
   lat: 39.98305556,
   lng: -0.03305556,
 }
@@ -14,21 +13,29 @@ function generateURL(article) {
 }
 
 function getLocation() {
-  const ip = '64.223.217.58'
-  const url = 'https://api.ipstack.com/' + ip + '?access_key=' + IPSTACK_KEY
-  return fetch(url)
-    .then(response => response.json())
-    .then(response => {
-      const { latitude, longitude } = response
-      if (latitude && longitude) {
-        refreshIndex({ lat: latitude, lng: longitude })
-      } else {
-        refreshIndex(DEFAULT_LOCATION)
-      }
+  if (navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(position => {
+      const { latitude, longitude } = position.coords
+      refreshIndex({ lat: latitude, lng: longitude })
     })
+  } else {
+    const url = 'https://json.geoiplookup.io/'
+    return fetch(url)
+      .then(response => response.json())
+      .then(response => {
+        const { latitude, longitude } = response
+        console.log(response)
+        if (latitude && longitude) {
+          refreshIndex({ lat: latitude, lng: longitude })
+        } else {
+          refreshIndex(DEFAULT_LOCATION)
+        }
+      })
+  }
 }
 
 function refreshIndex({ lat, lng }) {
+  LOCATION = { lat, lng }
   var radius = 10000;
 
   var api_params = $.param({
@@ -123,7 +130,7 @@ $(document).on('pagebeforeshow', '#article-details-page', function(e) {
  * Geolocation documentation: http://dev.w3.org/geo/api/spec-source.html
  */
 $(document).on('pagebeforeshow', '#map-page', function() {
-  drawMap(new google.maps.LatLng(DEFAULT_LOCATION));
+  drawMap(new google.maps.LatLng(LOCATION));
 
   function drawMap(latlng) {
     var myOptions = {
