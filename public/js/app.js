@@ -15,7 +15,7 @@ function generateURL(article) {
 
 function getLocation() {
   const ip = '64.223.217.58'
-  const url = 'http://api.ipstack.com/' + ip + '?access_key=' + IPSTACK_KEY
+  const url = 'https://api.ipstack.com/' + ip + '?access_key=' + IPSTACK_KEY
   return fetch(url)
     .then(response => response.json())
     .then(response => {
