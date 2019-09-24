@@ -3,10 +3,11 @@ let ARTICLES = []
 let LAST_OPENED_INFO_WINDOW
 
 // Initialize position with Castellon's coordinates
-let LOCATION = {
+const DEFAULT_LOCATION = {
   lat: 39.98305556,
   lng: -0.03305556,
 }
+let LOCATION = DEFAULT_LOCATION
 
 function generateURL(article) {
   return 'https://en.wikipedia.org/wiki/' + CURRENT_ARTICLE.title;
@@ -14,28 +15,31 @@ function generateURL(article) {
 
 function getLocation() {
   if (navigator.geolocation) {
-    navigator.geolocation.getCurrentPosition(position => {
-      const { latitude, longitude } = position.coords
-      refreshIndex({ lat: latitude, lng: longitude })
-    })
+    navigator.geolocation.getCurrentPosition(
+      position => {
+        const { latitude, longitude } = position.coords
+        refreshIndex({ lat: latitude, lng: longitude })
+      },
+      error => refreshIndex({})
+    )
   } else {
     const url = 'https://json.geoiplookup.io/'
     return fetch(url)
       .then(response => response.json())
       .then(response => {
         const { latitude, longitude } = response
-        console.log(response)
-        if (latitude && longitude) {
-          refreshIndex({ lat: latitude, lng: longitude })
-        } else {
-          refreshIndex(DEFAULT_LOCATION)
-        }
+        refreshIndex({ lat: latitude, lng: longitude })
       })
   }
 }
 
 function refreshIndex({ lat, lng }) {
-  LOCATION = { lat, lng }
+  if (lat && lng) {
+    LOCATION = { lat, lng }
+  } else {
+    LOCATION = DEFAULT_LOCATION
+  }
+
   var radius = 10000;
 
   var api_params = $.param({
@@ -43,7 +47,7 @@ function refreshIndex({ lat, lng }) {
     action: "query",
     generator: "geosearch",
     ggsradius: radius,
-    ggscoord: `${lat}|${lng}`,
+    ggscoord: `${LOCATION.lat}|${LOCATION.lng}`,
     prop: "coordinates|pageimages|pageterms",
     piprop: "thumbnail",
     pithumbsize: "250",
